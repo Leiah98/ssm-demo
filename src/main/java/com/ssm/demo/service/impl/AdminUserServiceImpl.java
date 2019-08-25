@@ -4,6 +4,7 @@ import com.ssm.demo.dao.AdminUserDao;
 import com.ssm.demo.entity.AdminUser;
 import com.ssm.demo.service.AdminUserService;
 import com.ssm.demo.utiles.*;
+import org.apache.log4j.Logger;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -14,6 +15,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -25,6 +27,8 @@ import java.util.List;
 @Service("adminUserService")
 public class AdminUserServiceImpl implements AdminUserService {
 
+    final static Logger logger = Logger.getLogger(AdminUserServiceImpl.class);
+
     @Autowired
     private AdminUserDao adminUserDao;
 
@@ -33,6 +37,7 @@ public class AdminUserServiceImpl implements AdminUserService {
         List<AdminUser> users = adminUserDao.findAdminUsers(pageUtil);
         int total = adminUserDao.getTotalAdminUser(pageUtil);
         PageResult pageResult = new PageResult(users, total, pageUtil.getLimit(), pageUtil.getPage());
+        logger.info("getAdminUserPage()方法调用，参数为：" + pageUtil.toString());
         return pageResult;
     }
 
@@ -45,9 +50,11 @@ public class AdminUserServiceImpl implements AdminUserService {
             if (adminUserDao.updateUserToken(adminUser.getId(), token) > 0) {
                 //返回数据时带上token
                 adminUser.setUserToken(token);
+                logger.info("updateTokenAndLogin()方法调用成功，参数为userName:" + userName + ",password:" + password);
                 return adminUser;
             }
         }
+        logger.error("updateTokenAndLogin()方法调用失败，参数为userName:" + userName + ",password:" + password);
         return null;
     }
 
@@ -81,6 +88,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     public int save(AdminUser user) {
         //密码加密
         user.setPassword(MD5Util.MD5Encode(user.getPassword(), "UTF-8"));
+        logger.info("save()方法调用成功，参数为:" + user.toString());
         return adminUserDao.addUser(user);
     }
 
@@ -118,11 +126,13 @@ public class AdminUserServiceImpl implements AdminUserService {
 
     @Override
     public int updatePassword(AdminUser user) {
+        logger.info("updatePassword()方法调用");
         return adminUserDao.updateUserPassword(user.getId(), MD5Util.MD5Encode(user.getPassword(), "UTF-8"));
     }
 
     @Override
     public int deleteBatch(Integer[] ids) {
+        logger.info("deleteBatch()方法调用，参数为:" + Arrays.toString(ids));
         return adminUserDao.deleteBatch(ids);
     }
 
