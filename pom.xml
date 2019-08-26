@@ -28,10 +28,11 @@
         <mybatis-spring.version>1.2.2</mybatis-spring.version>
         <maven.test.skip>true</maven.test.skip>
         <jackson.version>2.5.3</jackson.version>
+        <fastjson.version>1.2.4</fastjson.version>
         <slf4j.version>1.7.7</slf4j.version>
         <log4j.version>1.2.16</log4j.version>
         <commons-io.version>2.4</commons-io.version>
-        <commons-fileupload.version>1.3.1</commons-fileupload.version>
+        <commons-fileupload.version>1.3.3</commons-fileupload.version>
         <poi.version>3.16</poi.version>
     </properties>
 
@@ -51,6 +52,11 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
             <version>4.2.4.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
         </dependency>
 
         <!--springmvc依赖-->
@@ -125,7 +131,7 @@
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
-            <version>1.3.1</version>
+            <version>1.3.3</version>
         </dependency>
 
         <!--poi相关依赖包-->
@@ -143,7 +149,7 @@
         <!--日志依赖包-->
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
+            <artifactId>slf4j-nop</artifactId>
             <version>1.7.7</version>
         </dependency>
         <dependency>
@@ -153,10 +159,17 @@
         </dependency>
 
         <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
+        </dependency>
+
+
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
+            <version>4.12</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
