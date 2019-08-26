@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 
 /**
  * @program: ssm-demo
@@ -28,8 +29,7 @@ public class ArticleServiceImpl implements ArticleService {
     public PageResult getArticlePage(PageUtil pageUtil) {
         List<Article> articleList = articleDao.findArticles(pageUtil);
         int total = articleDao.getTotalArticles(pageUtil);
-        PageResult pageResult = new PageResult(articleList, total, pageUtil.getLimit(), pageUtil.getPage());
-        return pageResult;
+        return new PageResult(articleList, total, pageUtil.getLimit(), pageUtil.getPage());
     }
 
     @Override
@@ -39,8 +39,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<Article> queryList(Map<String, Object> map) {
-        List<Article> articles = articleDao.findArticles(map);
-        return articles;
+        return articleDao.findArticles(map);
     }
 
     @Override
@@ -72,5 +71,24 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public int deleteBatch(Integer[] ids) {
         return articleDao.deleteBatch(ids);
+    }
+
+    @Override
+    public int test(ExecutorService exec) {
+        Date now = new Date();
+        //创建连接池
+        for (int i = 0; i < 20; i++){
+            exec.submit(() -> {
+                for (int i1 = 0; i1 < 30; i1++) {
+                    Article article = new Article();
+                    article.setAddName("Hua");
+                    article.setArticleTitle("数据插入测试:" + i1 + "线程:" + Thread.currentThread().getId());
+                    article.setArticleContent("数据插入测试" + i1 + "线程:" + Thread.currentThread().getName());
+                    article.setCreateTime(now);
+                    articleDao.insertArticle(article);
+                }
+            });
+        }
+        return 0;
     }
 }

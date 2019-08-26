@@ -6,6 +6,7 @@ import com.ssm.demo.utiles.PageUtil;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 
 /**
  * @program: ssm-demo
@@ -30,4 +31,6 @@ public interface ArticleService {
     int delete(Integer id);
 
     int deleteBatch(Integer[] ids);
+
+    int test(ExecutorService exec);
 }
